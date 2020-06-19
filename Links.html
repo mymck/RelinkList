@@ -1,0 +1,75 @@
+<html>
+<head><style>
+a:visited{color:f2b8ee;}</style>
+<script>
+
+function getLinks(){
+var txaLinks = document.getElementById("txaLinks");
+let links = txaLinks.value;
+let linkList = links.split(/[,\n\t]+/);
+clearLinks();
+return linkList;
+}
+var attribute = 1;
+function buildLinks(linklist){
+	let links = linklist?linklist:getLinks();
+	let list = document.getElementById("linkList");
+	let attr = document.createTextNode("Attribute "+(attribute++));
+	list.appendChild(attr);
+	for(let i=0;i<links.length;i++){
+		let p = document.createElement("p");
+		let num = document.createTextNode((i+1)+" ");
+		p.appendChild(num);
+		let link = document.createElement("a");
+		let textnode = document.createTextNode(links[i].trim());
+		link.setAttribute("href", links[i]);
+		link.setAttribute("target","_blank");
+		link.appendChild(textnode);
+		p.appendChild(link);
+		list.appendChild(p);
+	}
+	var txaLinks = document.getElementById("txaLinks");
+	txaLinks.value = "";
+	txaLinks.focus();
+}
+
+function clearLinks(){
+let list = document.getElementById("linkList");
+list.innerHTML = "";
+var txaLinks = document.getElementById("txaLinks");
+txaLinks.value = "";
+attribute = 1;
+txaLinks.focus();
+}
+
+function addEnter(){
+	var txaLinks = document.getElementById("txaLinks");
+	txaLinks.addEventListener("keypress", function(e){
+		if(e.which === 13){
+			e.preventDefault();
+			buildLinks();
+		}
+	});
+}
+
+function openLinks(linklist){
+	let links = linklist?linklist:getLinks();
+	for(let i=0;i<links.length;i++){
+		//setTimeout(() => window.open(links[i],"Window"+i), 1000);
+		window.open(links[i],"Window"+i);
+	}
+	buildLinks(links);
+}
+</script>
+</head>
+<body onload="addEnter();">
+<textarea id="txaLinks" type="textarea" cols="60" rows="10"></textarea>
+<button id="btnSub" onclick="buildLinks()">Submit</button>
+<button id="btnOpen" onclick="openLinks()">Submit & Open</button>
+<button id="btnClear" onclick="clearLinks()">Clear</button>
+
+<div id="linkList"></div>
+<script>
+</script>
+</body>
+</html> 
